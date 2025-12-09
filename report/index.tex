@@ -291,7 +291,7 @@ The defining factor that eliminates most other proving systems, particularly tho
 \section{Difference with previous implementations}
 This protocol was implemented, tested and used in a productive environment in the SUI blockchain. However, the implementation differs in one key aspect. SUI blockchain has zkLogin embedded in its core protocol, allowing the \texttt{zkLoginId} to be the address itself. To do this, the SUI protocol has to include the zk proof validation in the nodes natively.
 
-In our cardano implementation, we had to find a workaround to this, since we do not intend to change the core Cardano protocol to support the protocol. Instead, an easier way is to embed the \texttt{zkLoginId} in an Aiken validator, use the validator's hash as the user address and use the Aiken validator to check the zk proof.
+In our cardano implementation, we had to find a workaround to this, since we do not intend to change the core Cardano protocol to support zkLogin. Instead, an easier way is to embed the \texttt{zkLoginId} in an Aiken validator, use the validator's hash as the user address and use the Aiken validator to check the zk proof.
 
 \section{Future Contributions}
 
