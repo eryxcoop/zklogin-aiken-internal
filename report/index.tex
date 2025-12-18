@@ -3,6 +3,43 @@
 \usepackage{amsmath}
 \usepackage{amstext}
 \usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinelanguage{json}{
+    keywords={type},
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    string=[s]{"}{"},
+}
+
+\lstdefinelanguage{Rust}{
+    keywords={zkLoginID, Validator, spend, fn, let, mut, pub, impl, struct, enum, match, if, else, while, for, in, loop, return, break, continue, use, mod, crate, super, self, Self, const, static, ref, move, async, await, trait, where},
+    keywordstyle=\color{blue}\bfseries,
+    comment=[l]{//},
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    morestring=[b]",
+}
+
+\lstset{
+    language=Rust,
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    tabsize=2
+}
 
 \title{zkLogin Report: Privacy-Preserving Authentication for Cardano}
 \author{Eryx Team}
@@ -264,6 +301,43 @@ If you choose the second option, a compromised or corrupted third party could ha
 The downside of using zkLogin is that your address is linked to a specific OpenID provider and wallet/dApp, since the address is derived from the \texttt{sub}, \texttt{aud} and \texttt{iss} fields of the JWT. Some variants of the protocol prevent the dependency on the wallet by using only the \texttt{sub} and \texttt{iss} fields to compute the \texttt{zkLoginId}, but that is not explored in this project.
 
 \section{Technical Details}
+\subsection{Validator overview}
+Let's see the data that should be present in the redeemer for the protocol to work:
+
+\begin{lstlisting}[language=json, caption={Transaction Redeemer format}, label={lst:json}]
+type ZkLoginRedeemer {
+    max_epoch: Int,
+    proof: Groth16Proof,
+    eph_pk: ByteArray,
+}
+\end{lstlisting}
+
+The validator body and its main functions look as follows:
+
+\begin{lstlisting}[caption={Validator body}, label={lst:rust}]
+Validator ZKLogin {
+    spend(
+        _datum: Option<Data>,
+        redeemer: ZkLoginRedeemer,
+        _utxo: OutputReference,
+        self: Transaction) {
+    verifyGroth16(
+        redeemer.proof,
+        redeemer.eph_pk,
+        redeemer.max_epoch,
+        zkLoginID
+    );
+    verify_tx_is_signed(
+        self.extra_signatories,
+        redeemer.eph_pk
+    );
+    verify_timestamp(redeemer.max_epoch)
+  }
+}
+
+\end{lstlisting}
+
+
 \subsection{Signature Algorithms}
 Let's explore the detail of the signature algorithms that will be used in the protocol.
 The signature algorithms in the application frontend must match the ones demonstrated by the zk circuits.
