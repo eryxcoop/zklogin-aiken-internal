@@ -41,6 +41,22 @@
     tabsize=2
 }
 
+\lstdefinelanguage{Circom}{
+    keywords={pragma, circom, template, component, signal, input, output},
+    keywordstyle=\color{blue}\bfseries,
+    comment=[l]{//},
+    commentstyle=\color{gray}\itshape,
+    morestring=[b]",
+}
+
+\lstset{
+    language=Circom,
+    basicstyle=\ttfamily\small,
+    frame=single,
+    breaklines=true,
+    showstringspaces=false
+}
+
 \title{zkLogin Report: Privacy-Preserving Authentication for Cardano}
 \author{Eryx Team}
 \date{\today}
@@ -334,9 +350,54 @@ Validator ZKLogin {
     verify_timestamp(redeemer.max_epoch)
   }
 }
-
 \end{lstlisting}
 
+An overview of the circuit looks like the following:
+
+\begin{lstlisting}[caption={Circom circuit overview}, label={lst:circom}]
+template ZkLogin {
+    // Public
+    signal input eph_pk;
+    signal input OIDP_pk;
+    signal input jwt_signature;
+    signal input zkLoginId;
+    signal input nonce;
+    signal input max_epoch;
+
+    //Private
+    signal input JWT;
+    signal input rand;
+    signal input salt;
+    signal input sub;
+    signal input aud;
+    signal input iss;
+
+    // JWT parsing
+    component parser = JWTParser;
+    parser.jwt <== JWT;
+    parser.sub <== sub;
+    parser.aud <== aud;
+    parser.iss <== iss;
+
+    // zkLoginId derivation check
+    component id_derivation = ZkLoginIdDerivation;
+    id_derivation.jwt <== JWT;
+    id_derivation.salt <== salt;
+    zkLoginId === id_derivation.out;
+
+    // nonce derivation check
+    component nonce_derivation = NonceDerivation;
+    nonce_derivation.eph_pk <== eph_pk;
+    nonce_derivation.rand <== rand;
+    nonce_derivation.max_epoch <== max_epoch;
+    nonce_derivation.out === nonce;
+
+    // OIDP signature verification
+    component verificator = JWTSignatureVerification;
+    verificator.OIDP_pk <== OIDP_pk;
+    verificator.jwt_signature <== jwt_signature;
+}
+\end{lstlisting}
 
 \subsection{Signature Algorithms}
 Let's explore the detail of the signature algorithms that will be used in the protocol.
