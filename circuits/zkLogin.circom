@@ -1,15 +1,15 @@
 pragma circom 2.2.3;
-include "./nonce.circom"
-include "./zkLoginId.circom"
+include "./nonce.circom";
+include "./zkLoginId.circom";
 
 template ZkLogin {
     // Public
     signal input eph_pk;
-    // signal input OIDP_pk;
-    // signal input jwt_signature;
     signal input zkLoginId;
     signal input nonce;
     signal input max_epoch;
+    // signal input OIDP_pk;
+    // signal input jwt_signature;
 
     //Private
     // signal input JWT;
@@ -20,7 +20,7 @@ template ZkLogin {
     signal input iss;
 
     // zkLoginId derivation check
-    component id_derivation = ZkLoginId;
+    component id_derivation = ZkLoginId();
     id_derivation.iss <== iss;
     id_derivation.aud <== aud;
     id_derivation.sub <== sub;
@@ -28,9 +28,9 @@ template ZkLogin {
     zkLoginId === id_derivation.zkLoginId;
 
     // nonce derivation check
-    component nonce_derivation = Nonce;
+    component nonce_derivation = Nonce();
     nonce_derivation.eph_pk <== eph_pk;
-    nonce_derivation.rand <== rand;
+    nonce_derivation.randomness <== rand;
     nonce_derivation.max_epoch <== max_epoch;
     nonce_derivation.nonce === nonce;
 
@@ -49,3 +49,6 @@ template ZkLogin {
     verificator.jwt_signature <== jwt_signature;
     verificator.jwt <== JWT; */
 }
+
+component main {public [eph_pk, zkLoginId, nonce, max_epoch]} = ZkLogin();
+
