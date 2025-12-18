@@ -78,7 +78,8 @@ Assuming Google as the OpenID provider, a zkLogin use case should have the follo
     \item The user logs into the wApp with Google credentials, obtaining a signed JWT from Google with the user data.
     \item The wApp requests access to the \textbf{secret salt} (from the salt service or the user itself).
     \item The wApp derives the user address and governing script, so now it can show the account funds and history of transactions.
-    \item User begins a transfer of funds from the wallet to any Cardano address.
+    \item Given the derived address, the user now is able to deposit their assets in that specific address.
+    \item User begins a transfer of funds from the wallet to any Cardano address. The spending is then controlled by the ephemeral secret data, the salt and the Google authentication credentials.
     \item A request is made to the \textbf{ZK proof service} to generate a proof ensuring certain statements (detailed later in the report).
     \item The wApp frontend signs the transaction with one of the ephemeral credentials.
     \item The transaction is submitted and succeeds if valid.

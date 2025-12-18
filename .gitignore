@@ -23,3 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 env
+
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.pdf
