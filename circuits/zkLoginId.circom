@@ -2,12 +2,12 @@ pragma circom 2.2.3;
 include "../node_modules/circomlib/circuits/poseidon.circom";
 
 
-template ZkLoginIdVerification {
+template ZkLoginId {
     signal input salt;
     signal input sub;
     signal input aud;
     signal input iss;
-    signal input zkLoginId;
+    signal output zkLoginId;
 
     component poseidon = Poseidon(4);
     poseidon.inputs[0] <== iss;
@@ -15,7 +15,5 @@ template ZkLoginIdVerification {
     poseidon.inputs[2] <== sub;
     poseidon.inputs[3] <== salt;
 
-    zkLoginId === poseidon.out;
+    zkLoginId <== poseidon.out;
 }
-
-component main = ZkLoginIdVerification();
