@@ -40,4 +40,5 @@ template ZkLogin {
     component verificator = JWTSignatureVerification;
     verificator.OIDP_pk <== OIDP_pk;
     verificator.jwt_signature <== jwt_signature;
+    verificator.jwt <== JWT;
 }
