@@ -24,7 +24,7 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { MIST_PER_SUI } from "@mysten/sui.js/utils";
 import {
   genAddressSeed,
-  generateNonce,
+  // generateNonce,
   generateRandomness,
   getExtendedEphemeralPublicKey,
   getZkLoginSignature,
@@ -55,11 +55,12 @@ import {
   RANDOMNESS_SESSION_STORAGE_KEY,
   REDIRECT_URI,
   STEPS_LABELS_TRANS_KEY,
-  SUI_DEVNET_FAUCET,
+  // SUI_DEVNET_FAUCET,
   SUI_PROVER_DEV_ENDPOINT,
   USER_SALT_LOCAL_STORAGE_KEY,
 } from "./constant";
 import { base, gray } from "./theme/colors";
+import {generateNonce} from "./aux/nonce.ts";
 
 export type PartialZkLoginSignature = Omit<
   Parameters<typeof getZkLoginSignature>["0"]["inputs"],
