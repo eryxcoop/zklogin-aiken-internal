@@ -378,6 +378,7 @@ template ZkLogin {
     parser.sub <== sub;
     parser.aud <== aud;
     parser.iss <== iss;
+    parser.nonce <== nonce;
 
     // zkLoginId derivation check
     component id_derivation = ZkLoginIdDerivation;
