@@ -477,4 +477,14 @@ OpenID Providers periodically rotate their public keys, and long-lived validator
 
 Correct handling of key rotation is critical for maintaining protocol security in production environments.
 
+\subsection{Preserving Staking Rewards in zkLogin-based Addresses}
+
+In the current zkLogin design, user identities are bound to script-based payment credentials, which could difficult participation in Cardano’s staking mechanism. In this direction, future improvements should explore mechanisms that allow zkLogin-controlled funds to accumulate and withdraw rewards without compromising the non-custodial and privacy-preserving properties of the protocol. Possible directions include:
+\begin{itemize}
+    \item The use of hybrid addresses combining a zkLogin-based payment script with a conventional stake key
+    \item Controlled withdrawal of rewards via stake scripts enforcing the same identity constraints as the zkLogin validator
+\end{itemize}
+
+Enabling staking compatibility would significantly improve capital efficiency and user experience, while preserving the security guarantees of zkLogin-based authentication.
+
 \end{document}
