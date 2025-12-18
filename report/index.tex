@@ -417,8 +417,8 @@ The algorithm used in this case is \textbf{Ed25519}, and it's the standard algor
 
 \subsection{Hash Functions}
 The zkLogin protocol uses hash functions to compute the \texttt{nonce} and the \texttt{zkLoginId}.
-The algorithms used are a combination of the PoseidonBN254 hash function and the Blake2b\_256 hash function.
-Poseidon is a function that is called zk-friendly because it doesn't use too much bitwise arithmetic, which is usually expensive to represent in arithmetic equations.
+The algorithm used is the PoseidonBN254 hash function.
+Poseidon is a function that is called zk-friendly because it doesn't use too much bitwise arithmetic, which is usually expensive to represent in arithmetic equations. The Poseidon version used in the circuits must match exactly the one in the offchain components, or the verification will fail.
 
 \subsection{Why Groth16?}
 The selection of \textbf{Groth16} as the primary proving system for the zkLogin protocol on Cardano, over alternatives like Plonk and systems based on FRI (e.g., Plonky2, Risc0), is driven by two critical factors: its efficiency with Cardano's existing primitives and its compliance with transaction size limits.
