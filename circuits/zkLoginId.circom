@@ -1,5 +1,5 @@
 pragma circom 2.2.3;
-include "../node_modules/circomlib/circuits/poseidon.circom";
+include "../node_modules/poseidon-bls12381-circom/circuits/poseidon255.circom";
 
 
 template ZkLoginId {
@@ -9,11 +9,13 @@ template ZkLoginId {
     signal input iss;
     signal output zkLoginId;
 
-    component poseidon = Poseidon(4);
-    poseidon.inputs[0] <== iss;
-    poseidon.inputs[1] <== aud;
-    poseidon.inputs[2] <== sub;
-    poseidon.inputs[3] <== salt;
+    component poseidon = Poseidon255(4);
+    poseidon.in[0] <== iss;
+    poseidon.in[1] <== aud;
+    poseidon.in[2] <== sub;
+    poseidon.in[3] <== salt;
 
     zkLoginId <== poseidon.out;
 }
+
+//component main = ZkLoginId();
