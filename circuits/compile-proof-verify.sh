@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euxo pipefail
 
 CIRCUIT_PATH="$2"
 
@@ -27,6 +28,10 @@ function compile() {
 
     snarkjs zkey export verificationkey ${OUTPUT_PATH}${CIRCUIT_NAME}_final.zkey ${OUTPUT_PATH}verification_key.json
 
+    mv ${OUTPUT_PATH}${CIRCUIT_NAME}_js/generate_witness.js ${OUTPUT_PATH}${CIRCUIT_NAME}_js/generate_witness.cjs
+    mv ${OUTPUT_PATH}${CIRCUIT_NAME}_js/witness_calculator.js ${OUTPUT_PATH}${CIRCUIT_NAME}_js/witness_calculator.cjs
+    sed -i '1s|witness_calculator\.js|witness_calculator.cjs|' ${OUTPUT_PATH}${CIRCUIT_NAME}_js/generate_witness.cjs
+
 }
 
 case "$1" in
@@ -36,7 +41,7 @@ case "$1" in
     -p )
 
       # Generates witness
-      node ${OUTPUT_PATH}${CIRCUIT_NAME}_js/generate_witness.js ${OUTPUT_PATH}${CIRCUIT_NAME}_js/${CIRCUIT_NAME}.wasm ${INPUT_PATH}  ${OUTPUT_PATH}witness.wtns
+      node ${OUTPUT_PATH}${CIRCUIT_NAME}_js/generate_witness.cjs ${OUTPUT_PATH}${CIRCUIT_NAME}_js/${CIRCUIT_NAME}.wasm ${INPUT_PATH}  ${OUTPUT_PATH}witness.wtns
       snarkjs groth16 prove ${OUTPUT_PATH}${CIRCUIT_NAME}_final.zkey ${OUTPUT_PATH}witness.wtns ${OUTPUT_PATH}proof.json ${OUTPUT_PATH}public.json
       ;;
     -v )
