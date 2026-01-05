@@ -24,7 +24,7 @@ export function generateNonce(publicKey: PublicKey, maxEpoch: number, randomness
     // const Z = toBigEndianBytes(bigNum, 20);
     console.log("----------------- Nonce: ", bigNum)
     console.log("----------------- pk_high: ", eph_public_key_high)
-    console.log("----------------- low: ", eph_public_key_low)
+    console.log("----------------- pk_low: ", eph_public_key_low)
     console.log("----------------- max_ep: ", BigInt(maxEpoch))
     console.log("----------------- randomness: ", BigInt(randomness))
     const nonce = base64url.encode(bigNum.toString());
