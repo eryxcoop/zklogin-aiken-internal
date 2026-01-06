@@ -3,7 +3,7 @@ pragma circom 2.2.3;
 include "slice.circom";
 include "../node_modules/circomlib/circuits/bitify.circom";
 
-template FeatureInclusionInJwtPayload(nCount, nWidth, maxClaimLength) {
+template FeatureInclusionInJwtPayload(nCount, maxClaimLength) {
 
     signal input payload[nCount];
 
@@ -28,4 +28,4 @@ template FeatureInclusionInJwtPayload(nCount, nWidth, maxClaimLength) {
     }
 }
 
-component main = FeatureInclusionInJwtPayload(128, 8, 8);
+component main = FeatureInclusionInJwtPayload(68, 10);

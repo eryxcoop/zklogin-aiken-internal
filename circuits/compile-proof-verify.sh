@@ -48,6 +48,7 @@ case "$1" in
       snarkjs groth16 verify ${OUTPUT_PATH}verification_key.json ${OUTPUT_PATH}public.json ${OUTPUT_PATH}proof.json
       ;;
     -cpv )
+      rm -rf build/*
       compile
       node ${OUTPUT_PATH}${CIRCUIT_NAME}_js/generate_witness.cjs ${OUTPUT_PATH}${CIRCUIT_NAME}_js/${CIRCUIT_NAME}.wasm ${INPUT_PATH}  ${OUTPUT_PATH}witness.wtns
       snarkjs groth16 prove ${OUTPUT_PATH}${CIRCUIT_NAME}_final.zkey ${OUTPUT_PATH}witness.wtns ${OUTPUT_PATH}proof.json ${OUTPUT_PATH}public.json
