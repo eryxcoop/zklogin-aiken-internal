@@ -59,6 +59,7 @@ import {
 } from "./constant";
 import { base, gray } from "./theme/colors";
 import {generateNonce} from "./aux/nonce.ts";
+import {computeZkLoginId} from "./aux/zkLoginId.ts";
 
 export type PartialZkLoginSignature = Omit<
   Parameters<typeof getZkLoginSignature>["0"]["inputs"],
@@ -97,6 +98,7 @@ function App() {
   const [textSalt, setTextSalt] = useState<string>();
 
   //Generate User's Cardano Address
+  const [zkLoginId, setZkLoginId] = useState("");
   const [zkLoginUserAddress, setZkLoginUserAddress] = useState("");
 
   //Fetch ZK Proof (Groth16)
@@ -869,15 +871,6 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                 <code>aud</code> 都不会变。
               </Trans>
             </Typography>
-            <SyntaxHighlighter
-              wrapLongLines
-              language="typescript"
-              style={oneDark}
-            >
-              {`import { jwtToAddress } from "@mysten/zklogin";
-
- const zkLoginUserAddress = jwtToAddress(jwt, userSalt);`}
-            </SyntaxHighlighter>
             <Box>
               <Button
                 variant="contained"
@@ -888,8 +881,10 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                   if (!userSalt) {
                     return;
                   }
-                  const zkLoginUserAddress = jwtToAddress(jwtString, userSalt);
-                  setZkLoginUserAddress(zkLoginUserAddress);
+                  // const zkLoginUserAddress = jwtToAddress(jwtString, userSalt);
+                  // setZkLoginUserAddress(zkLoginUserAddress);
+                  const zkLoginId_ = computeZkLoginId(jwtString, userSalt)
+                  setZkLoginId(zkLoginId_)
                 }}
               >
                 {t("c9bbf457")}
@@ -903,7 +898,7 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
               }}
             >
               User Sui Address:{" "}
-              {zkLoginUserAddress && (
+              {zkLoginId && (
                 <code>
                   <Typography
                     component="span"
@@ -912,7 +907,7 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                       fontWeight: 600,
                     }}
                   >
-                    {zkLoginUserAddress}
+                    {zkLoginId}
                   </Typography>
                 </code>
               )}
