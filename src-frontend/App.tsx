@@ -16,7 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import { fromB64 } from "@mysten/bcs";
-import { useSuiClientQuery } from "@mysten/dapp-kit";
 import { SuiClient } from "@mysten/sui.js/client";
 import { SerializedSignature } from "@mysten/sui.js/cryptography";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
@@ -31,7 +30,6 @@ import {
   jwtToAddress,
 } from "@mysten/zklogin";
 import axios from "axios";
-import { BigNumber } from "bignumber.js";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import queryString from "query-string";
@@ -98,7 +96,7 @@ function App() {
   const [userSalt, setUserSalt] = useState<string>();
   const [textSalt, setTextSalt] = useState<string>();
 
-  //Generate User's Sui Address
+  //Generate User's Cardano Address
   const [zkLoginUserAddress, setZkLoginUserAddress] = useState("");
 
   //Fetch ZK Proof (Groth16)
@@ -190,17 +188,8 @@ function App() {
     userSalt,
   ]);
 
-  // query zkLogin address balance
-  const { data: addressBalance } = useSuiClientQuery(
-    "getBalance",
-    {
-      owner: zkLoginUserAddress,
-    },
-    {
-      enabled: Boolean(zkLoginUserAddress),
-      refetchInterval: 1500,
-    }
-  );
+  // TODO: query address balance for cardano address
+  const addressBalance = undefined;
 
   const resetState = () => {
     setCurrentEpoch("");
@@ -443,15 +432,9 @@ function App() {
               </Typography>
             </code>
           </Typography>
-          {addressBalance && (
             <Typography>
-              Balance:{" "}
-              {BigNumber(addressBalance?.totalBalance)
-                .div(MIST_PER_SUI.toString())
-                .toFixed(6)}{" "}
-              SUI
+              Balance: yet to implement
             </Typography>
-          )}
         </Stack>
       )}
 
