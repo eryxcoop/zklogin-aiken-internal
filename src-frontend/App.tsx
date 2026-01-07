@@ -80,7 +80,7 @@ function App() {
   const [ephemeralKeyPair, setEphemeralKeyPair] = useState<Ed25519Keypair>();
 
   // Fetch JWT
-  const [currentEpoch, setCurrentEpoch] = useState("");
+  const [currentEpoch, setCurrentEpoch] = useState(0);
   const [maxEpoch, setMaxEpoch] = useState(0);
   const [randomness, setRandomness] = useState("");
   const [nonce, setNonce] = useState("");
@@ -563,14 +563,15 @@ ${JSON.stringify(ephemeralKeyPair?.getPublicKey().toBase64())}`}
                 variant="contained"
                 size="small"
                 onClick={async () => {
-                  const { epoch } = await suiClient.getLatestSuiSystemState();
-
-                  setCurrentEpoch(epoch);
+                  const currentPosixTime = Date.now()
+                  setCurrentEpoch(currentPosixTime);
+                  const validitySeconds = 1800;
+                  const maxEpoch = currentPosixTime + validitySeconds;
                   window.localStorage.setItem(
                     MAX_EPOCH_LOCAL_STORAGE_KEY,
-                    String(Number(epoch) + 10)
+                    String(maxEpoch)
                   );
-                  setMaxEpoch(Number(epoch) + 10);
+                  setMaxEpoch(maxEpoch);
                 }}
               >
                 {t("3a96f638")}
