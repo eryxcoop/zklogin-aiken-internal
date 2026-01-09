@@ -9,16 +9,20 @@ template ZkLogin(audSize, issSize, subSize) {
     signal input zkLoginId;
     signal input nonce;
     signal input max_epoch;
-    // signal input OIDP_pk;
-    // signal input jwt_signature;
 
     //Private
-    // signal input JWT;
     signal input rand;
     signal input salt;
     signal input iss_ascii[issSize];
     signal input aud_ascii[audSize];
     signal input sub_ascii[subSize];
+
+    // jwt parsing
+    //signal input jwt;
+
+    // signature verification
+    // signal input OIDP_pk;
+    // signal input jwt_signature;
 
     // zkLoginId derivation check
     component id_derivation = ZkLoginIdAscii(audSize, issSize, subSize);
