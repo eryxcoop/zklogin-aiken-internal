@@ -36,16 +36,12 @@ export function hashASCIIStrToField(str: string/*, maxSize: number*/) {
         .split('')
         .map((c) => c.charCodeAt(0));
 
-    console.log(strAscii)
+    console.log(str, strAscii)
 
     const chunkSize = PACK_WIDTH / 8;
     const chunks = chunkArrayCustom(strAscii, chunkSize);
-    console.log(chunks);
     const packed = chunks.map((chunk) => bytesBEToBigInt(chunk));
-    console.log(packed);
     const hash = poseidonHash(packed);
-    console.log(str, hash);
-    console.log("------------------");
     return hash;
 }
 

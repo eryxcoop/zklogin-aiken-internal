@@ -881,8 +881,7 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                   if (!userSalt) {
                     return;
                   }
-                  // const zkLoginUserAddress = jwtToAddress(jwtString, userSalt);
-                  // setZkLoginUserAddress(zkLoginUserAddress);
+                  console.log("salt", userSalt)
                   const zkLoginId_ = computeZkLoginId(jwtString, userSalt)
                   setZkLoginId(zkLoginId_)
                 }}
