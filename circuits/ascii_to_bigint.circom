@@ -1,50 +1,36 @@
-template ASCII2BigInt(strLength){
+pragma circom 2.2.3;
+
+include "../node_modules/poseidon-bls12381-circom/circuits/poseidon255.circom";
+
+template ASCII2BigInt(strLength, packedLength){
+    assert(strLength > 0);
+    assert(packedLength > 0);
+
     signal input ascii[strLength];
-    signal acc[strLength];
-
-    var packedLength = (strLength + 31 - 1) / 31;
-
     signal packedAscii[packedLength];
     signal output packedBigInt;
 
-    signal aux[packedLength][31];
+    signal sum[packedLength][31];
 
-    for (var i = 0; i < strLength; i+= 31){
-        aux[i][0] = ascii[i] * (1 << 30);
-    }
-
-    // -------- CÁLCULO -------- //
-    for (var j = 0; j < packedLength, j++){
-        var pack <-- 0;
-        for (var i = 31; i > 0, i--){
-            var ascii_index = j * 31 + (31 - i);
+    for (var j = 0; j < packedLength; j++){
+        sum[j][0] <== ascii[j * 31] * (1 << 30*8);
+        for (var i = 1; i < 31; i++){
+            var ascii_index = j * 31 + i;
             if (ascii_index < strLength) {
-                pack <-- pack + ascii[ascii_index] * (1 << (i-1));
+                sum[j][i] <== sum[j][i-1] + ascii[ascii_index] * (1 << ((30-i) * 8));
             }
         }
-        packedAscii[j] <== pack;
     }
 
-    // -------- VERIFICACION -------- //
-    for (var j = 0; j < packedLength, j++){
-        signal sum[31];
-        sum[0] = ascii[j * 31];
-        for (var i = 31; i > 0, i--){
-            var ascii_index = j * 31 + (31 - i);
-            if (ascii_index < strLength) {
-                pack <-- pack + ascii[ascii_index] * (1 << (i-1));
-            }
-        }
-        packedAscii[j] <== pack;
+    for (var i = 0; i < packedLength; i++){
+        packedAscii[i] <== sum[i][30];
     }
-
-    ascii[0] * 2^30 + ascii[1] * 2^29 + ... + ascii[30] * 2^0 === packedAscii[0]
-    ascii[31] * 2^30 + ascii[31+1] * 2^29 + ... + ascii[31+30] * 2^0 === packedAscii[1]
-    ...
 
     // -------- HASH -------- //
-    component pos = Poseidon(packedLength);
+    component pos = Poseidon255(packedLength);
     pos.in <== packedAscii;
     packedBigInt <== pos.out;
 
 }
+
+component main = ASCII2BigInt(31,1);
