@@ -18,7 +18,7 @@ template ZkLoginId {
     zkLoginId <== poseidon.out;
 }
 
-template ZkLoginIdAscii(audSize, audBlocks, issSize, issBlocks, subSize, subBlocks) {
+template ZkLoginIdAscii(audSize, issSize, subSize) {
     signal input salt;
     signal input iss_ascii[issSize];
     signal iss;
@@ -28,15 +28,15 @@ template ZkLoginIdAscii(audSize, audBlocks, issSize, issBlocks, subSize, subBloc
     signal sub;
     signal output zkLoginId;
 
-    component sub2field = ASCII2BigInt(subSize, subBlocks);
+    component sub2field = ASCII2BigInt(subSize);
     sub2field.ascii <== sub_ascii;
     sub <== sub2field.packedBigInt;
 
-    component aud2field = ASCII2BigInt(audSize, audBlocks);
+    component aud2field = ASCII2BigInt(audSize);
     aud2field.ascii <== aud_ascii;
     aud <== aud2field.packedBigInt;
 
-    component iss2field = ASCII2BigInt(issSize, issBlocks);
+    component iss2field = ASCII2BigInt(issSize);
     iss2field.ascii <== iss_ascii;
     iss <== iss2field.packedBigInt;
 
@@ -48,4 +48,4 @@ template ZkLoginIdAscii(audSize, audBlocks, issSize, issBlocks, subSize, subBloc
     zkLoginId <== zkLoginIdComputation.zkLoginId;
 }
 
-component main = ZkLoginIdAscii(72,3,27,1,21,1);
+component main = ZkLoginIdAscii(72,27,21);

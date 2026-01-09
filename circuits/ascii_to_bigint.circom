@@ -2,7 +2,10 @@ pragma circom 2.2.3;
 
 include "../node_modules/poseidon-bls12381-circom/circuits/poseidon255.circom";
 
-template ASCII2BigInt(strLength, packedLength){
+template ASCII2BigInt(strLength){
+
+    var packedLength = (strLength <= 31) ? 1 : ((strLength <= 62) ? 2 : (strLength <= 93 ? 3 : 4));
+
     signal input ascii[strLength];
     signal output packedBigInt;
 
@@ -28,3 +31,5 @@ template ASCII2BigInt(strLength, packedLength){
     }
     packedBigInt <== pos.out;
 }
+
+//component main = ASCII2BigInt(50);
