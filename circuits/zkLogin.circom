@@ -18,7 +18,10 @@ template ZkLogin(audSize, issSize, subSize) {
     signal input sub_ascii[subSize];
 
     // jwt parsing
-    //signal input jwt;
+    signal input jwt;
+    signal input iss_offset;
+    signal input aud_offset;
+    signal input sub_offset;
 
     // signature verification
     // signal input OIDP_pk;
