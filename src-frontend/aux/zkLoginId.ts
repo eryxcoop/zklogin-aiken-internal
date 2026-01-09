@@ -29,8 +29,10 @@ export function hashASCIIStrToField(str: string/*, maxSize: number*/) {
     //     throw new Error(`String ${str} is longer than ${maxSize} chars`);
     // }
 
+    const extendedLength = Math.trunc((str.length + 30) / 31) * 31;
+
     const strAscii = str
-        // .padEnd(maxSize, String.fromCharCode(0))
+        .padEnd(extendedLength, String.fromCharCode(0))
         .split('')
         .map((c) => c.charCodeAt(0));
 
@@ -40,6 +42,7 @@ export function hashASCIIStrToField(str: string/*, maxSize: number*/) {
     const chunks = chunkArrayCustom(strAscii, chunkSize);
     console.log(chunks);
     const packed = chunks.map((chunk) => bytesBEToBigInt(chunk));
+    console.log(packed);
     const hash = poseidonHash(packed);
     console.log(str, hash);
     console.log("------------------");
