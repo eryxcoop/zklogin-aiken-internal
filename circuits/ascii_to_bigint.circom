@@ -7,10 +7,9 @@ template ASCII2BigInt(strLength, packedLength){
     assert(packedLength > 0);
 
     signal input ascii[strLength];
-    signal packedAscii[packedLength];
     signal output packedBigInt;
 
-    signal sum[packedLength][31];
+    signal output sum[packedLength][31];
 
     for (var j = 0; j < packedLength; j++){
         sum[j][0] <== ascii[j * 31] * (1 << 30*8);
@@ -18,19 +17,19 @@ template ASCII2BigInt(strLength, packedLength){
             var ascii_index = j * 31 + i;
             if (ascii_index < strLength) {
                 sum[j][i] <== sum[j][i-1] + ascii[ascii_index] * (1 << ((30-i) * 8));
+            } else {
+                sum[j][i] <== sum[j][i-1];
             }
         }
     }
 
-    for (var i = 0; i < packedLength; i++){
-        packedAscii[i] <== sum[i][30];
-    }
-
     // -------- HASH -------- //
-    component pos = Poseidon255(packedLength);
-    pos.in <== packedAscii;
-    packedBigInt <== pos.out;
 
+    component pos = Poseidon255(packedLength);
+    for (var i = 0; i < packedLength; i++){
+        pos.in[i] <== sum[i][30];
+    }
+    packedBigInt <== pos.out;
 }
 
-component main = ASCII2BigInt(31,1);
+component main = ASCII2BigInt(72,3);
