@@ -1,6 +1,7 @@
 pragma circom 2.2.3;
 include "./nonce.circom";
 include "./zkLoginId.circom";
+include "./feature_inclusion_in_jwt_payload.circom";
 
 template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     // Public
@@ -18,13 +19,13 @@ template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     signal input sub_ascii[subSize];
 
     // jwt parsing
-    signal input jwt_payload_ascii;
+    signal input jwt_payload_ascii[payloadSize];
     signal input nonce_ascii[nonceSize];
     signal input iss_offset;
     signal input aud_offset;
     signal input sub_offset;
     signal input nonce_offset;
-    component parser = FeatureInclusionInJwtPayload(payloadSize, nonceSize, audSize, issSize, subSize);
+    component parser = FeatureInclusionInJwtPayload(payloadSize, nonceSize, issSize, audSize, subSize);
     parser.payload <== jwt_payload_ascii;
     parser.subOffset <== sub_offset;
     parser.sub <== sub_ascii;
@@ -33,7 +34,7 @@ template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     parser.issOffset <== iss_offset;
     parser.iss <== iss_ascii;
     parser.nonceOffset <== nonce_offset;
-    parser.nonce <== nonce;
+    parser.nonce <== nonce_ascii;
 
     // TODO: chequear consistencia entre nonce y nonce_ascii
 

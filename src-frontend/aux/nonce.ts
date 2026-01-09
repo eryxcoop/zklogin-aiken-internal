@@ -27,5 +27,6 @@ export function generateNonce(publicKey: PublicKey, maxEpoch: number, randomness
     console.log("----------------- pk_low: ", eph_public_key_low)
     console.log("----------------- max_ep: ", BigInt(maxEpoch))
     console.log("----------------- randomness: ", BigInt(randomness))
+    // return nonce.toString();
     return base64url.encode(nonce.toString());
 }
