@@ -3,13 +3,10 @@ pragma circom 2.2.3;
 include "../node_modules/poseidon-bls12381-circom/circuits/poseidon255.circom";
 
 template ASCII2BigInt(strLength, packedLength){
-    assert(strLength > 0);
-    assert(packedLength > 0);
-
     signal input ascii[strLength];
     signal output packedBigInt;
 
-    signal output sum[packedLength][31];
+    signal sum[packedLength][31];
 
     for (var j = 0; j < packedLength; j++){
         sum[j][0] <== ascii[j * 31] * (1 << 30*8);
@@ -31,5 +28,3 @@ template ASCII2BigInt(strLength, packedLength){
     }
     packedBigInt <== pos.out;
 }
-
-component main = ASCII2BigInt(72,3);
