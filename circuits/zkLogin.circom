@@ -2,7 +2,7 @@ pragma circom 2.2.3;
 include "./nonce.circom";
 include "./zkLoginId.circom";
 
-template ZkLogin(audSize, issSize, subSize) {
+template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     // Public
     signal input eph_pk_high;
     signal input eph_pk_low;
@@ -18,10 +18,24 @@ template ZkLogin(audSize, issSize, subSize) {
     signal input sub_ascii[subSize];
 
     // jwt parsing
-    signal input jwt;
+    signal input jwt_payload_ascii;
+    signal input nonce_ascii[nonceSize];
     signal input iss_offset;
     signal input aud_offset;
     signal input sub_offset;
+    signal input nonce_offset;
+    component parser = FeatureInclusionInJwtPayload(payloadSize, nonceSize, audSize, issSize, subSize);
+    parser.payload <== jwt_payload_ascii;
+    parser.subOffset <== sub_offset;
+    parser.sub <== sub_ascii;
+    parser.audOffset <== aud_offset;
+    parser.aud <== aud_ascii;
+    parser.issOffset <== iss_offset;
+    parser.iss <== iss_ascii;
+    parser.nonceOffset <== nonce_offset;
+    parser.nonce <== nonce;
+
+    // TODO: chequear consistencia entre nonce y nonce_ascii
 
     // signature verification
     // signal input OIDP_pk;
@@ -43,13 +57,6 @@ template ZkLogin(audSize, issSize, subSize) {
     nonce_derivation.max_epoch <== max_epoch;
     nonce_derivation.nonce === nonce;
 
-    // JWT parsing
-    /* component parser = JWTParser;
-    parser.jwt <== JWT;
-    parser.sub <== sub;
-    parser.aud <== aud;
-    parser.iss <== iss;
-    parser.nonce <== nonce; */
 
 
     // OIDP signature verification
@@ -59,5 +66,5 @@ template ZkLogin(audSize, issSize, subSize) {
     verificator.jwt <== JWT; */
 }
 
-component main {public [eph_pk_high, eph_pk_low, zkLoginId, nonce, max_epoch]} = ZkLogin(72,27,21);
+component main {public [eph_pk_high, eph_pk_low, zkLoginId, nonce, max_epoch]} = ZkLogin(439,103,27,72,21);
 

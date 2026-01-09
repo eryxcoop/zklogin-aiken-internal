@@ -2,6 +2,7 @@ pragma circom 2.2.3;
 
 include "../node_modules/poseidon-bls12381-circom/circuits/poseidon255.circom";
 
+// TODO: esto es un serialize, la parte interna de la suma acumulada la queremos usar aparte para el nonce
 template ASCII2BigInt(strLength){
 
     var packedLength = (strLength <= 31) ? 1 : ((strLength <= 62) ? 2 : (strLength <= 93 ? 3 : 4));
