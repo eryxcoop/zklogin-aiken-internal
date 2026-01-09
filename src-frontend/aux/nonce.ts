@@ -3,7 +3,7 @@ import type {PublicKey} from "@mysten/sui.js/cryptography";
 //import {toBigEndianBytes} from "@mysten/sui.js/zklogin";
 import {base64url} from "jose";
 import {toHEX} from "@mysten/bcs";
-import { poseidon4 } from "poseidon-bls12381";
+import { poseidonHash } from "./poseidon.ts";
 
 //const NONCE_LENGTH = 27;
 
@@ -20,7 +20,7 @@ export function generateNonce(publicKey: PublicKey, maxEpoch: number, randomness
     const publicKeyBytes = toBigIntBE(publicKey.toRawBytes());
     const eph_public_key_high = publicKeyBytes / 2n ** 128n;
     const eph_public_key_low = publicKeyBytes % 2n ** 128n;
-    const nonce = poseidon4([BigInt(maxEpoch), BigInt(randomness), eph_public_key_high, eph_public_key_low]);
+    const nonce = poseidonHash([BigInt(maxEpoch), BigInt(randomness), eph_public_key_high, eph_public_key_low]);
     // const Z = toBigEndianBytes(bigNum, 20);
     console.log("----------------- Nonce: ", nonce)
     console.log("----------------- pk_high: ", eph_public_key_high)
