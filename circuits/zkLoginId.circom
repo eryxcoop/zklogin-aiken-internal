@@ -21,10 +21,10 @@ template ZkLoginId {
 template ZkLoginIdAscii(audSize, issSize, subSize) {
     signal input salt;
     signal input iss_ascii[issSize];
-    signal iss;
     signal input aud_ascii[audSize];
-    signal aud;
     signal input sub_ascii[subSize];
+    signal iss;
+    signal aud;
     signal sub;
     signal output zkLoginId;
 
@@ -48,4 +48,4 @@ template ZkLoginIdAscii(audSize, issSize, subSize) {
     zkLoginId <== zkLoginIdComputation.zkLoginId;
 }
 
-component main = ZkLoginIdAscii(72,27,21);
+//component main = ZkLoginIdAscii(72,27,21);

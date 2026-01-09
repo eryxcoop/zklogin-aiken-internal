@@ -18,4 +18,4 @@ template Nonce {
     nonce <== poseidon.out;
 }
 
-component main = Nonce();
+//component main = Nonce();
