@@ -1,21 +1,27 @@
 use aiken/interval.{Finite}
+use aiken/primitive/bytearray.{to_int_big_endian, take, drop}
 use cardano/transaction.{OutputReference, Transaction}
 use src_backend/types.{ZkLoginRedeemer}
 use src_backend/ephemeral_auth.{verify_ephemeral_signature}
 
-validator zk_login(zk_login_id: String) {
+validator zk_login(_zk_login_id: String) {
     spend(
         _datum: Option<Data>,
         redeemer: ZkLoginRedeemer,
         _own_ref: OutputReference,
         self: Transaction,
     ) {
-        // TODO: Dividir ephemeralkey en low y high
-        let ephemeral_public_key_verification = verify_ephemeral_signature(redeemer, self)
-        // self.validity_range --> ValidityRange = Interval
-        let is_valid_max_epoch = self.validity_range.upper_bound.bound_type == Finite(redeemer.max_epoch)
+        let eph_pk_high_bytearray = take(redeemer.ephemeral_public_key, 128)
+        let eph_pk_low_bytearray = drop(redeemer.ephemeral_public_key, 128)
 
-        ephemeral_public_key_verification && is_valid_max_epoch
+        let eph_pk_high = to_int_big_endian(eph_pk_high_bytearray)
+        let eph_pk_low = to_int_big_endian(eph_pk_low_bytearray)
+
+        let verifies_ephemeral_signature = verify_ephemeral_signature(redeemer, self)
+        let max_epoch_is_valid = self.validity_range.upper_bound.bound_type == Finite(redeemer.max_epoch)
+        //expect _redeemer = offchain custom("../circuits/zk_login.circom", [eph_pk_high, eph_pk_low, zk_login_id, max_epoch])
+        
+        verifies_ephemeral_signature && max_epoch_is_valid
     }
 }
 

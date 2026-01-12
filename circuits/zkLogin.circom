@@ -8,11 +8,11 @@ template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     signal input eph_pk_high;
     signal input eph_pk_low;
     signal input zkLoginId;
-    signal input nonce;
     signal input max_epoch;
 
     //Private
     signal input rand;
+    signal input nonce;
     signal input salt;
     signal input iss_ascii[issSize];
     signal input aud_ascii[audSize];
@@ -67,5 +67,5 @@ template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     verificator.jwt <== JWT; */
 }
 
-component main {public [eph_pk_high, eph_pk_low, zkLoginId, nonce, max_epoch]} = ZkLogin(439,103,27,72,21);
+component main {public [eph_pk_high, eph_pk_low, zkLoginId max_epoch]} = ZkLogin(439,103,27,72,21);
 
