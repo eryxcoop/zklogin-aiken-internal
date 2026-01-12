@@ -1,5 +1,8 @@
-use aiken/crypto.{VerificationKeyHash}
+use aiken/crypto.{VerificationKey}
+use ak_381/groth16.{Proof}
 
 pub type ZkLoginRedeemer {
-  ephemeral_key_hash: VerificationKeyHash,
+  max_epoch: Int,
+  ephemeral_public_key: VerificationKey,
+  groth16Proof: Proof,
 }
