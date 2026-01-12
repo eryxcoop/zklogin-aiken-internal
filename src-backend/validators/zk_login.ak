@@ -19,7 +19,7 @@ validator zk_login(_zk_login_id: String) {
 
         let verifies_ephemeral_signature = verify_ephemeral_signature(redeemer, self)
         let max_epoch_is_valid = self.validity_range.upper_bound.bound_type == Finite(redeemer.max_epoch)
-        //expect _redeemer = offchain custom("../circuits/zk_login.circom", [eph_pk_high, eph_pk_low, zk_login_id, max_epoch])
+        expect _redeemer = offchain custom("../circuits/zkLogin.circom", [eph_pk_high, eph_pk_low, zk_login_id, max_epoch])
         
         verifies_ephemeral_signature && max_epoch_is_valid
     }
