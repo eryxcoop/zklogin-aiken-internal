@@ -29,3 +29,5 @@ report/*.log
 report/*.out
 report/*.toc
 report/*.pdf
+
+**/ceremony.ptau
