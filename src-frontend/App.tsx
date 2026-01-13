@@ -278,7 +278,7 @@ function App() {
               columnGap: "16px",
             }}
           >
-            Sui zkLogin Demo{" "}
+            Cardano zkLogin Demo{" "}
             <ButtonGroup
               variant="outlined"
               aria-label="Disabled elevation buttons"
@@ -896,7 +896,7 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                 gap: "20px",
               }}
             >
-              User Sui Address:{" "}
+              zkLoginId:{" "}
               {zkLoginId && (
                 <code>
                   <Typography
@@ -910,20 +910,23 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                   </Typography>
                 </code>
               )}
-              <LoadingButton
-                variant="contained"
-                sx={{
-                  ml: "24px",
-                }}
-                size="small"
-                loading={requestingFaucet}
-                disabled={!zkLoginUserAddress}
-                onClick={requestFaucet}
-              >
-                Request Test ADA
-              </LoadingButton>
-              {requestingFaucet && <Typography>Not implemented yet</Typography>}
+
             </Typography>
+              {/*<Typography>
+                  <LoadingButton
+                      variant="contained"
+                      sx={{
+                          ml: "24px",
+                      }}
+                      size="small"
+                      loading={requestingFaucet}
+                      disabled={!zkLoginUserAddress}
+                      onClick={requestFaucet}
+                  >
+                      Request Test ADA
+                  </LoadingButton>
+                  {requestingFaucet && <Typography>Not implemented yet</Typography>}
+              </Typography>
             <SyntaxHighlighter
                 wrapLongLines
                 language="typescript"
@@ -933,7 +936,7 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
 zkLoginID = ${zkLoginUserAddress} //(gonna be used as input for the zk proof)
 address = H(aiken_validator)
               `}
-            </SyntaxHighlighter>
+            </SyntaxHighlighter>*/}
           </Stack>
         )}
         {/* Step 6 */}
