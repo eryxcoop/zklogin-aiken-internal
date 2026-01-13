@@ -67,5 +67,5 @@ template ZkLogin(payloadSize, nonceSize, issSize, audSize, subSize) {
     verificator.jwt <== JWT; */
 }
 
-component main {public [eph_pk_high, eph_pk_low, zkLoginId, max_epoch]} = ZkLogin(439,103,27,72,21);
+component main {public [eph_pk_high, eph_pk_low, zkLoginId, max_epoch]} = ZkLogin(443,103,27,72,21);
 
