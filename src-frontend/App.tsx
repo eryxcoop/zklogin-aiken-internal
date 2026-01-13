@@ -292,15 +292,6 @@ function App() {
               >
                 ENG
               </Button>
-              <Button
-                size="small"
-                variant={lang === "zh" ? "contained" : "outlined"}
-                onClick={() => {
-                  setLang("zh");
-                }}
-              >
-                中文
-              </Button>
             </ButtonGroup>
             <Typography
               sx={{
@@ -312,7 +303,7 @@ function App() {
                 borderRadius: "4px",
               }}
             >
-              Devnet
+              Preview TestNet
             </Typography>
           </Typography>
           <Button
@@ -367,17 +358,6 @@ function App() {
           </Dialog>
         </Stack>
       </Box>
-      {/* devnet unavailable Alert   */}
-      {/* <Alert
-        severity="error"
-        sx={{
-          mb: "36px",
-          fontWeight: 600,
-        }}
-      >
-        Sui Devnet node is currently unavailable, and the demo process may not
-        be completed.
-      </Alert> */}
       <Box
         sx={{
           width: "100%",
@@ -862,14 +842,6 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
               }}
             >
               {t("2fb333f5")}
-            </Typography>
-            <Typography>
-              <Trans i18nKey="e05797f4">
-                用户 Sui 地址由 <code>sub</code> 、 <code>iss</code> 、
-                <code>aud</code> 和 <code>user_salt</code> 共同决定，对于同一个
-                JWT，每次登陆时 <code>sub</code> 、 <code>iss</code> 、
-                <code>aud</code> 都不会变。
-              </Trans>
             </Typography>
             <Box>
               <Button
