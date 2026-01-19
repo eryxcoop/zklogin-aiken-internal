@@ -858,7 +858,7 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                   setZkLoginId(zkLoginId_)
                 }}
               >
-                {t("c9bbf457")}
+                Generate zkLoginId
               </Button>
             </Box>
             <Typography
@@ -884,6 +884,14 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
               )}
 
             </Typography>
+            <Box>
+              <Button
+                  variant="contained"
+                  disabled={!zkLoginId}
+              >
+                Generate wallet address
+              </Button>
+            </Box>
               {/*<Typography>
                   <LoadingButton
                       variant="contained"
