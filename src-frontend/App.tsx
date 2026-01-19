@@ -888,6 +888,11 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
               <Button
                   variant="contained"
                   disabled={!zkLoginId}
+                  onClick={() => {
+                    console.log("zkLoginId", zkLoginId)
+                    const walletAddress_ = "sarlanga"
+                    setZkLoginUserAddress(walletAddress_)
+                  }}
               >
                 Generate wallet address
               </Button>
