@@ -23,11 +23,9 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { MIST_PER_SUI } from "@mysten/sui.js/utils";
 import {
   genAddressSeed,
-  // generateNonce,
   generateRandomness,
   getExtendedEphemeralPublicKey,
   getZkLoginSignature,
-  jwtToAddress,
 } from "@mysten/zklogin";
 import axios from "axios";
 import { JwtPayload, jwtDecode } from "jwt-decode";
@@ -58,7 +56,7 @@ import {
   USER_SALT_LOCAL_STORAGE_KEY,
 } from "./constant";
 import { base, gray } from "./theme/colors";
-import {generateNonce} from "./aux/nonce.ts";
+import {generateNonce, toBigIntBE} from "./aux/nonce.ts";
 import {computeZkLoginId} from "./aux/zkLoginId.ts";
 
 export type PartialZkLoginSignature = Omit<
@@ -256,6 +254,39 @@ function App() {
       setRequestingFaucet(false);
     }*/
   };
+
+  function gatherData(){
+
+      const publicKey = ephemeralKeyPair.getPublicKey()
+      const publicKeyBytes = toBigIntBE(publicKey.toRawBytes());
+      const eph_public_key_high = publicKeyBytes / 2n ** 128n;
+      const eph_public_key_low = publicKeyBytes % 2n ** 128n;
+      const secretKey = ephemeralKeyPair.export().privateKey
+
+      const jwtBase64: string = oauthParams.id_token;
+      const payloadBase64 = jwtBase64.split(".")[1]
+      const decoded = base64UrlDecode(part)
+
+      console.log("decoded: ", decoded)
+      console.log("------------------------------")
+      console.log("nonce: ", nonce)
+      console.log("publicKey: ", publicKeyBytes.toString(16))
+      console.log("eph_public_key_high: ", eph_public_key_high.toString(16))
+      console.log("eph_public_key_low: ", eph_public_key_low.toString(16))
+      console.log("secretKey: ", secretKey)
+      console.log("maxEpoch: ", maxEpoch)
+      console.log("randomness: ", randomness)
+      // console.log("jwtString: ", jwtString)
+      console.log("salt: ", textSalt)
+      console.log("zkLoginId: ", zkLoginId)
+
+
+      console.log("nonce_offset: ", 238)
+      console.log("iss_offset: ", 8)
+      console.log("aud_offset: ", 125)
+      console.log("sub_offset: ", 206)
+      console.log("------------------------------")
+  }
 
   return (
     <Box>
@@ -884,6 +915,12 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
               )}
 
             </Typography>
+              <Button
+                  variant="contained"
+                  onClick={gatherData}
+              >
+                  Print session data
+              </Button>
               {/*<Typography>
                   <LoadingButton
                       variant="contained"
