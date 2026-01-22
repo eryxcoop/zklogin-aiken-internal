@@ -1,9 +1,8 @@
 import type {PublicKey} from "@mysten/sui.js/cryptography";
-//import {poseidonHash} from "@mysten/zklogin";
-//import {toBigEndianBytes} from "@mysten/sui.js/zklogin";
-import {base64url} from "jose";
 import {toHEX} from "@mysten/bcs";
 import { poseidonHash } from "./poseidon.ts";
+import { toString as u8aToString } from "uint8arrays/to-string";
+import {base64url} from "jose";
 
 //const NONCE_LENGTH = 27;
 
@@ -27,6 +26,21 @@ export function generateNonce(publicKey: PublicKey, maxEpoch: number, randomness
     console.log("----------------- pk_low: ", eph_public_key_low)
     console.log("----------------- max_ep: ", BigInt(maxEpoch))
     console.log("----------------- randomness: ", BigInt(randomness))
-    // return nonce.toString();
-    return base64url.encode(nonce.toString());
+    return bigintToBase64_32(nonce);
+    // return base64url.encode(nonce.toString());
+}
+
+function bigintToBase64_32(n: bigint) {
+    if (n < 0n) throw new Error("negative");
+    if (n >= (1n << 256n)) alert("overflow");
+
+    const bytes = new Uint8Array(32);
+    let x = n;
+
+    for (let i = 31; i >= 0; i--) {
+        bytes[i] = Number(x & 0xffn);
+        x >>= 8n;
+    }
+
+    return u8aToString(bytes, "base64pad");
 }
