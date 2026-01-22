@@ -17,11 +17,16 @@ const requestListener = function (req, res) {
         res.end();
         return;
     }
+    const responseObject = {
+        message: 'Hello, World!',
+        status: 'success',
+        walletAddress: 'addr1q9sp3v7h0xt82l9ex9jsc9xzt2v5v74j9r7p9x8mrw5v9fppp58y7xg6g7k65c5pgvvxdplm7w07czz7e4dfflpnldwsw6x9ru'
+    };
 
     // Set the response header with status code 200 (OK) and content type
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.writeHead(200, {'Content-Type': 'application/json'});
     // Send the response body and close the connection
-    res.end("Hello, World! This is a Node.js server.");
+    res.end(JSON.stringify(responseObject));
 };
 
 // Create the server with our request listener

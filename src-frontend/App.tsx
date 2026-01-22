@@ -897,11 +897,11 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                         if (!response.ok) {
                           throw new Error(`HTTP error! status: ${response.status}`);
                         }
-
                         const result = await response.json(); // Parse the JSON response
                         // setData(result); // Store the result in the 'data' state variable
                         // setError(null);
                         console.log("Request successful:", result)
+                        setZkLoginUserAddress(result.walletAddress)
                       } catch (err) {
                         // setError(err.message);
                         // setData(null);
@@ -913,8 +913,6 @@ ${JSON.stringify(decodedJwt, null, 2)}`}
                     };
 
                     fetchData(); // Call the async function
-                    const walletAddress_ = "sarlanga"
-                    setZkLoginUserAddress(walletAddress_)
                   }}
               >
                      Generate user wallet address
