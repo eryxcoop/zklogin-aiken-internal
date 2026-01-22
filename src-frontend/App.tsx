@@ -265,14 +265,16 @@ function App() {
 
       const jwtBase64: string = oauthParams.id_token;
       const payloadBase64 = jwtBase64.split(".")[1]
-      const decoded = base64UrlDecode(part)
 
-      console.log("decoded: ", decoded)
+      const jwtDecoded = jwtDecode(jwtString)
+      const nonce = jwtDecoded.nonce
+
       console.log("------------------------------")
+      console.log("payloadBase64: ", payloadBase64)
       console.log("nonce: ", nonce)
-      console.log("publicKey: ", publicKeyBytes.toString(16))
-      console.log("eph_public_key_high: ", eph_public_key_high.toString(16))
-      console.log("eph_public_key_low: ", eph_public_key_low.toString(16))
+      console.log("publicKey: ", publicKeyBytes.toString(10))
+      console.log("eph_public_key_high: ", eph_public_key_high.toString(10))
+      console.log("eph_public_key_low: ", eph_public_key_low.toString(10))
       console.log("secretKey: ", secretKey)
       console.log("maxEpoch: ", maxEpoch)
       console.log("randomness: ", randomness)
@@ -578,8 +580,10 @@ ${JSON.stringify(ephemeralKeyPair?.getPublicKey().toBase64())}`}
                 onClick={async () => {
                   const currentPosixTime = Date.now()
                   setCurrentEpoch(currentPosixTime);
-                  const validitySeconds = 1800;
-                  const maxEpoch = currentPosixTime + validitySeconds;
+                  const validityHours = 24*30*2;
+                  const validitySeconds = validityHours*60*60;
+                  const validityMilliseconds = validitySeconds * 1000;
+                  const maxEpoch = currentPosixTime + validityMilliseconds;
                   window.localStorage.setItem(
                     MAX_EPOCH_LOCAL_STORAGE_KEY,
                     String(maxEpoch)
