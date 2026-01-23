@@ -58,6 +58,7 @@ import {
 import { base, gray } from "./theme/colors";
 import {generateNonce, toBigIntBE} from "./aux/nonce.ts";
 import {computeZkLoginId} from "./aux/zkLoginId.ts";
+import {base64url, base64} from "jose";
 
 export type PartialZkLoginSignature = Omit<
   Parameters<typeof getZkLoginSignature>["0"]["inputs"],
@@ -255,6 +256,22 @@ function App() {
     }*/
   };
 
+  function base64toAscii(base64Text: string): number[] {
+      return base64Text.split("").map(char => char.charCodeAt(0))
+  }
+
+    function base64ToBigInt(base64) {
+
+        const binary = atob(base64);
+
+        let result = 0n;
+        for (let i = 0; i < binary.length; i++) {
+            result = (result << 8n) + BigInt(binary.charCodeAt(i));
+        }
+
+        return result;
+    }
+
   function gatherData(){
 
       const publicKey = ephemeralKeyPair.getPublicKey()
@@ -265,29 +282,39 @@ function App() {
 
       const jwtBase64: string = oauthParams.id_token;
       const payloadBase64 = jwtBase64.split(".")[1]
+      const decodedPayload = base64url.decode(payloadBase64)
 
       const jwtDecoded = jwtDecode(jwtString)
       const nonce = jwtDecoded.nonce
+      const iss_ascii = base64toAscii(jwtDecoded.iss)
+      const aud_ascii = base64toAscii(jwtDecoded.aud)
+      const sub_ascii = base64toAscii(jwtDecoded.sub)
 
-      console.log("------------------------------")
-      console.log("payloadBase64: ", payloadBase64)
-      console.log("nonce: ", nonce)
-      console.log("publicKey: ", publicKeyBytes.toString(10))
-      console.log("eph_public_key_high: ", eph_public_key_high.toString(10))
-      console.log("eph_public_key_low: ", eph_public_key_low.toString(10))
+      let dump = {
+          "nonce": base64ToBigInt(nonce),
+          "eph_pk_high": eph_public_key_high.toString(10),
+          "eph_pk_low": eph_public_key_low.toString(10),
+          "max_epoch": maxEpoch,
+          "rand": randomness,
+          "salt": textSalt,
+          "zkLoginId": zkLoginId,
+          "iss_ascii": iss_ascii,
+          "aud_ascii": aud_ascii,
+          "sub_ascii": sub_ascii,
+          "jwt_payload_ascii": decodedPayload,
+          "nonce_ascii": base64toAscii(nonce),
+          "nonce_offset": 238,
+          "iss_offset": 8,
+          "aud_offset": 125,
+          "sub_offset": 206,
+      }
+
+      const dump_str = JSON.stringify(dump, (_, v) =>
+          typeof v === 'bigint' ? v.toString() : v
+      , 1);
+
+      console.log(dump_str);
       console.log("secretKey: ", secretKey)
-      console.log("maxEpoch: ", maxEpoch)
-      console.log("randomness: ", randomness)
-      // console.log("jwtString: ", jwtString)
-      console.log("salt: ", textSalt)
-      console.log("zkLoginId: ", zkLoginId)
-
-
-      console.log("nonce_offset: ", 238)
-      console.log("iss_offset: ", 8)
-      console.log("aud_offset: ", 125)
-      console.log("sub_offset: ", 206)
-      console.log("------------------------------")
   }
 
   return (
