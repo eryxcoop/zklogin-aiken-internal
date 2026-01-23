@@ -58,7 +58,7 @@ import {
 import { base, gray } from "./theme/colors";
 import {generateNonce, toBigIntBE} from "./aux/nonce.ts";
 import {computeZkLoginId} from "./aux/zkLoginId.ts";
-import {base64url, base64} from "jose";
+import {base64url} from "jose";
 
 export type PartialZkLoginSignature = Omit<
   Parameters<typeof getZkLoginSignature>["0"]["inputs"],
@@ -309,12 +309,17 @@ function App() {
           "sub_offset": 206,
       }
 
+      let keys = {
+          "public_key": publicKeyBytes.toString(16),
+          "private_key": base64ToBigInt(secretKey).toString(16),
+      }
+
       const dump_str = JSON.stringify(dump, (_, v) =>
           typeof v === 'bigint' ? v.toString() : v
       , 2);
 
       console.log(dump_str);
-      console.log("secretKey: ", secretKey)
+      console.log(JSON.stringify(keys))
   }
 
   return (
@@ -607,7 +612,7 @@ ${JSON.stringify(ephemeralKeyPair?.getPublicKey().toBase64())}`}
                 onClick={async () => {
                   const currentPosixTime = Date.now()
                   setCurrentEpoch(currentPosixTime);
-                  const validityHours = 24*30*2;
+                  const validityHours = 2;
                   const validitySeconds = validityHours*60*60;
                   const validityMilliseconds = validitySeconds * 1000;
                   const maxEpoch = currentPosixTime + validityMilliseconds;
