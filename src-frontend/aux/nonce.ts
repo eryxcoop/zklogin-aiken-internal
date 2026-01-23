@@ -32,7 +32,7 @@ export function generateNonce(publicKey: PublicKey, maxEpoch: number, randomness
 
 function bigintToBase64_32(n: bigint) {
     if (n < 0n) throw new Error("negative");
-    if (n >= (1n << 256n)) alert("overflow");
+    if (n >= (1n << 256n)) Error("overflow");
 
     const bytes = new Uint8Array(32);
     let x = n;
