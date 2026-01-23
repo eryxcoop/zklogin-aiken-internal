@@ -301,7 +301,7 @@ function App() {
           "iss_ascii": iss_ascii,
           "aud_ascii": aud_ascii,
           "sub_ascii": sub_ascii,
-          "jwt_payload_ascii": decodedPayload,
+          "jwt_payload_ascii": Array.from(decodedPayload),
           "nonce_ascii": base64toAscii(nonce),
           "nonce_offset": 238,
           "iss_offset": 8,
@@ -311,7 +311,7 @@ function App() {
 
       const dump_str = JSON.stringify(dump, (_, v) =>
           typeof v === 'bigint' ? v.toString() : v
-      , 1);
+      , 2);
 
       console.log(dump_str);
       console.log("secretKey: ", secretKey)
